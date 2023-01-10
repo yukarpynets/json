@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+
+  <style>
+    .card {
+      width: 30%;
+      margin: 0 auto;
+      padding: 1em;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Digita il paese</h1>
+  <input type="text" id="input">
+  <button type="button" onclick="digitCountry()">BUTTON</button>
+
+  <div id="risultati"></div>
+
+  <!-- <input type="text" onblur="digitCountry()"> -->
+
+
+
+  <!-- Realizzare una card all’interno di una pagina web, utilizzando bootstrap, 
+        che visualizzi i dati ricevuti dalla richiesta Ajax verso https://go-apod.herokuapp.com/apod
+        Per dettagli riguardo alla risposta guarda il sito: https://go-apod.herokuapp.com/ -->
+
+
+
+
+  <!-- <div class="card">
+            <h1>Astronomy Picture of the Day</h1>
+            <img  id="img" src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 id="testo" class="card-title"></h5>
+              <p id="testo-p" class="card-text"></p>
+              <a id="bottone" href="#" class="btn btn-primary">HD</a>
+            </div>
+          </div>-->
+
+  <script>
+    //   function onload(){
+    //       let xhr = new XMLHttpRequest();
+    //       xhr.onreadystatechange = function(){
+    //           if(this.readyState == 4 && this.status == 200){
+    //               let obj = JSON.parse(this.responseText);
+    //               document.querySelector("#img").src = obj.url;
+    //               document.querySelector("#testo").innerHTML = obj.title;
+    //               document.querySelector("#testo-p").innerHTML = obj.explanation;
+    //               document.querySelector("#bottone").href = obj.hdurl;
+    //           } 
+    //       }
+    //       xhr.open("GET", "https://go-apod.herokuapp.com/apod", true);
+    //       xhr.send();
+    //   }onload() -->
+
+
+    //   <!-- ESERCIZIO: Esercizio individuale per il pomeriggio: svolgere l'esercizio 2 dell'esercitazione 05-12 (sulle università). 
+
+    //   Una volta visualizzati i nomi delle università sul sito, 
+    //   dichiarate un array in una variabile globale con dentro 10 link 
+    //   di immagini di università trovate su Google. Per ogni università ricavata dall'API, 
+    //   far visualizzare il nome dell'università assieme ad una immagine random presa dal array. 
+    //   Come risultato dovrete quindi avere un sito nel quale quando l'utente inserisce un paese, 
+    //   vengono visualizzate tutti i nomi delle università di quel paese assieme a delle immagini 
+    //   random per ognuna di queste. Per dubbi o chiarimenti potete scrivermi su WhatsApp, buon lavoro!
+
+    //   Utilizzare l’API http://universities.hipolabs.com/search per ricavare le università di un paese.
+    //   Il vostro sito dovrà permettere agli utenti di inserire un paese, per poi renderizzare sul sito la
+    //   lista dei nomi delle università.
+    //   Nota che nel Url, se il paese scelto dall’utente contiene diverse parole, queste dovranno
+    //   essere separate da un + invece che dallo spazio.
+    //   Ad esempio, se l’utente inserisce “United Kingdom”, il vostro codice farà una chiamata
+    //   all’URL http://universities.hipolabs.com/search?country=United+Kingdom
+    //   EXTRA: se il paese non esiste, verrà notificato attraverso una alert()
+
+
+
+    // -->
+
+    function digitCountry() {
+      let inputValue = document.getElementById("input").value;
+      inputValue = inputValue.replaceAll(" ","+");
+      
+      let url = "http://universities.hipolabs.com/search?country="; 
+
+      url+=inputValue;
+
+
+
+      
+
+      chiamaApiEsterna(url, funzioneCheElaboraIDati)
+    }
+
+    function funzioneCheElaboraIDati(risultatoChiamata) {
+      if(risultatoChiamata.length==0){
+        alert ("Paese digitato non esiste!")
+      }
+      document.getElementById("risultati").innerHTML="";
+      console.log(risultatoChiamata)
+      for (let universita of risultatoChiamata) {
+        const p = document.createElement("p");
+        p.innerText = universita.name;
+        document.getElementById("risultati").appendChild(p);
+      }
+    }
+
+    function chiamaApiEsterna(url, funzioneDaChiamarePerElaborareIDati) {
+      let xhr = new XMLHttpRequest(); //Classe che chiama servizi web
+      xhr.onreadystatechange = function () { //Quando torna qualcosa
+        if (this.readyState == 4 && this.status == 200) {
+          const risultatoChiamata = JSON.parse(this.responseText);
+          funzioneDaChiamarePerElaborareIDati(risultatoChiamata)
+        }
+      }
+      xhr.open("GET", url, true); //Indirizzo da chiamare
+      xhr.send(); //Chiama!
+    }
+
+
+
+
+
+
+
+
+  </script>
+</body>
+
+</html>
